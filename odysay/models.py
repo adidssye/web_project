@@ -36,3 +36,7 @@ class TravelPlace(db.Model):
 
     # 생성 일시 (서버 시스템 로컬 시간으로 저장)
     created_at = db.Column(db.DateTime, default=datetime.now)
+
+    # 👈 아래 두 줄을 새로 추가합니다.
+    latitude = db.Column(db.Float, nullable=True)
+    longitude = db.Column(db.Float, nullable=True)

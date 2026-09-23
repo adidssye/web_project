@@ -9,14 +9,12 @@
     <title>Odysay</title>
 
     <!-- Bootstrap CSS -->
-    <link
-        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
-        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+          rel="stylesheet">
 
     <!-- Leaflet CSS -->
-    <link
-        rel="stylesheet"
-        href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+    <link rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 </head>
 
 
@@ -68,7 +66,6 @@
      ">
 
     <!-- 제목 -->
-
     <div class="mb-4">
 
         <h2 class="fw-bold mb-2">
@@ -94,7 +91,6 @@
 
 
         <!-- 사용자 이름 -->
-
         <div class="mb-3">
 
             {{ signup_form.username.label(
@@ -110,7 +106,6 @@
 
 
         <!-- 이메일 -->
-
         <div class="mb-3">
 
             {{ signup_form.email.label(
@@ -126,7 +121,6 @@
 
 
         <!-- 비밀번호 -->
-
         <div class="mb-3">
 
             {{ signup_form.password1.label(
@@ -142,7 +136,6 @@
 
 
         <!-- 비밀번호 확인 -->
-
         <div class="mb-4">
 
             {{ signup_form.password2.label(
@@ -158,7 +151,6 @@
 
 
         <!-- 가입하기 -->
-
         {{ signup_form.submit(
             class="btn btn-dark w-100 py-2",
             value="가입하기"
@@ -190,38 +182,63 @@
 
 
 <!-- =====================================================
-     Leaflet
+     JS (Leaflet & Bootstrap)
 ===================================================== -->
-
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+    // 1. 지도 생성 (단 1번만 생성)
+    const map = L.map('map').setView([20, 0], 2);
 
-    // 지도 생성
-    const map = L.map('map').setView(
-        [20, 0],
-        2
-    );
+    // OpenStreetMap 지도 타일 설정
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
 
+    // 2. 백엔드 API에서 등록된 여행지 목록 불러오기 (/homepage/api/places)
+    fetch('/homepage/api/places')
+        .then(response => response.json())
+        .then(data => {
+            console.log("불러온 여행지 데이터:", data);
 
-    // OpenStreetMap 지도
-    L.tileLayer(
-        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-        {
-            maxZoom: 19,
-            attribution: '&copy; OpenStreetMap contributors'
-        }
-    ).addTo(map);
+            if (!data || data.length === 0) return;
 
-</script>
+            data.forEach(place => {
+                if (place.lat && place.lng) {
+                    // 핑 클릭 시 나타날 팝업 내용
+                    const popupContent = `
+                        <div style="min-width: 180px; padding: 5px;">
+                            <h6 style="margin: 0 0 5px 0; font-weight: bold;">${place.title}</h6>
+                            <p style="margin: 0 0 6px 0; font-size: 12px; color: #666;">
+                                📍 ${place.country} ${place.region}
+                            </p>
+                            <p style="margin: 0 0 8px 0; font-size: 13px; line-height: 1.4;">
+                                ${place.intro ? place.intro : '소개글이 없습니다.'}
+                            </p>
+                            <a href="/homepage/trip_location/${place.id}"
+                               class="btn btn-sm btn-dark w-100"
+                               style="font-size: 11px; padding: 3px 8px;">
+                                상세보기
+                            </a>
+                        </div>
+                    `;
 
+                    // 지도에 마커 추가
+                    L.marker([place.lat, place.lng])
+                        .addTo(map)
+                        .bindPopup(popupContent);
+                }
+            });
 
-<!-- =====================================================
-     Bootstrap JS
-===================================================== -->
-
-<script
-    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js">
+            // 가장 최근에 등록된 위치로 지도 시점 자동 이동 (zoom: 10)
+            const lastPlace = data[data.length - 1];
+            if (lastPlace && lastPlace.lat && lastPlace.lng) {
+                map.setView([lastPlace.lat, lastPlace.lng], 10);
+            }
+        })
+        .catch(err => console.error("여행지 목록 로드 실패:", err));
 </script>
 
 </body>
