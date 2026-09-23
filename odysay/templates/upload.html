@@ -6,8 +6,17 @@
 
     <title>어딧세이 - 여행지 등록</title>
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet">
+
     <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css">
+      href="{{ url_for('static', filename='css/reset.css') }}">
+
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='css/common.css') }}">
+
+    <link rel="stylesheet"
+      href="{{ url_for('static', filename='css/style.css') }}">
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/upload.css') }}">
@@ -15,10 +24,40 @@
 </head>
 <body>
 {# header  #}
+    <header class="header">
+    <div class="header-inner">
 
+        <a href="index.html" class="logo">
+            <span class="logo-symbol">△△</span>
+
+            <div class="logo-text">
+                <strong>어딧세이</strong>
+                <span>ODYSAY</span>
+            </div>
+        </a>
+
+        <nav class="gnb">
+            <a href="#">여행지</a>
+            <a href="#">커뮤니티</a>
+            <a href="#">여행지 등록</a>
+            <a href="#">마이페이지</a>
+        </nav>
+
+        <div class="header-util">
+            <button type="button" class="search-button">
+
+            </button>
+
+            <button type="button" class="logout-button">
+                로그아웃
+            </button>
+        </div>
+
+    </div>
+</header>
 
 {# main #}
-<main class="page-container">
+    <main class="page-container">
 
 {#  left menu  #}
     <aside class="left-menu">
@@ -31,11 +70,11 @@
 
         <div class="menu-list">
 
-            <a class="selected" href="#">
+            <a class="selected" href="#" id="uploadMenu" >
                 여행지 등록
             </a>
 
-            <a href="#">
+            <a href="#" id="guideMenu">
                 등록 가이드
             </a>
 
@@ -52,7 +91,7 @@
     </aside>
 
     {#  FORM  #}
-    <section class="form-container">
+    <section class="form-container" id="uploadContent">
         <div class="form-title">
             <h2>여행지 등록하기</h2>
 
@@ -63,7 +102,7 @@
 
         </div>
 
-        <form id="travelForm">
+        <form id="travelForm" method="POST" action="{{ url_for('homepage.upload') }}" enctype="multipart/form-data">
             <section class="form-section">
 
                 <h3>기본 정보</h3>
@@ -199,7 +238,7 @@
                             주변 맛집
                         </label>
 
-                        <textarea id="restaurant" class="form-control" maxlength="300" placeholder="이 근처에 추천하고 싶은 맛집이 있나요?"></textarea>
+                        <textarea id="restaurant" name="restaurant" class="form-control" maxlength="300" placeholder="이 근처에 추천하고 싶은 맛집이 있나요?"></textarea>
                     </div>
 
                     <div class="form-group">
@@ -207,7 +246,7 @@
                             주변 볼거리 / 즐길거리
                         </label>
 
-                        <textarea id="nearby" class="form-control" maxlength="300" placeholder="함께 둘러보면 좋은 장소나 즐길거리가 있나요?"></textarea>
+                        <textarea id="nearby" name="nearby" class="form-control" maxlength="300" placeholder="함께 둘러보면 좋은 장소나 즐길거리가 있나요?"></textarea>
                     </div>
                 </div>
             </section>
@@ -236,7 +275,7 @@
                     </span>
                 </label>
 
-                <input type="file" id="photos" accept="image/png, image/jpeg" multiple hidden>
+                <input type="file" id="photos" name="photos" accept="image/png, image/jpeg" multiple hidden>
 
                 <div id="previewContainer" class="preview-container">
                 </div>
@@ -267,6 +306,57 @@
 
         </form>
 
+    </section>
+
+
+    <!-- 등록가이드 -->
+    <section class="guide-container" id="guideContent">
+
+        <div class="form-title">
+            <h2>여행지 등록 가이드</h2>
+            <p>
+                다른 여행자에게 도움이 될 수 있도록<br>
+                아래 내용을 확인한 후 여행지를 등록해주세요.
+            </p>
+        </div>
+
+        <div class="guide-box">
+            <h3>01. 직접 경험한 여행지를 등록해주세요.</h3>
+            <p>
+                실제로 방문했던 장소를 기준으로 정확하고 유용한 정보를 작성해주세요.
+            </p>
+        </div>
+
+        <div class="guide-box">
+            <h3>02. 여행지 정보를 자세하게 작성해주세요.</h3>
+            <p>
+                나라, 지역, 여행지명과 함께 추천하는 이유를 작성해주세요.
+            </p>
+        </div>
+
+        <div class="guide-box">
+            <h3>03. 사진을 함께 등록해주세요.</h3>
+            <p>
+                직접 촬영한 여행 사진을 등록하면 다른 여행자에게 더 많은 도움이 됩니다.
+            </p>
+        </div>
+
+        <div class="guide-box">
+            <h3>04. 광고성 내용은 등록하지 말아주세요.</h3>
+            <p>
+                여행 정보와 관계없는 광고 및 홍보성 내용은 제외해주세요.
+            </p>
+        </div>
+        <div class="guide-bottom">
+            <p>
+                등록 가이드를 모두 확인하셨나요?<br>
+                작성하던 내용은 그대로 유지됩니다.
+            </p>
+
+            <button type="button" id="guideConfirmButton">
+                등록하러 가기
+            </button>
+        </div>
     </section>
 
     <!-- right -->
