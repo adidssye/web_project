@@ -150,4 +150,30 @@ document.addEventListener("DOMContentLoaded", function () {
 
     });
 
+    // 메뉴 전환
+    const uploadMenu = document.getElementById("uploadMenu");
+    const guideMenu = document.getElementById("guideMenu");
+
+    const uploadContent = document.getElementById("uploadContent");
+    const guideContent = document.getElementById("guideContent");
+
+    uploadMenu.addEventListener("click", function(event) {
+        event.preventDefault();
+
+        uploadContent.style.display = "block";
+        guideContent.style.display = "none";
+
+        uploadMenu.classList.add("selected");
+        guideMenu.classList.remove("selected");
+    });
+
+    guideMenu.addEventListener("click", function(event) {
+        event.preventDefault();
+
+        uploadContent.style.display = "none";
+        guideContent.style.display = "block";
+
+        guideMenu.classList.add("selected");
+        uploadMenu.classList.remove("selected");
+    });
 });

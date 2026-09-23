@@ -18,7 +18,7 @@ body {
             rgba(10, 30, 55, 0.3),
             rgba(10, 30, 55, 0.3)
         ),
-        url("../photo/travel-bg.jpg");
+        url("../photo/travel-left.jpg");
 
     background-size: cover;
     background-position: center;
@@ -456,6 +456,38 @@ textarea.form-control {
     color: white;
 }
 
+/* 등록 가이드 */
+
+.guide-container {
+    display: none;
+    padding: 10px 15px 30px;
+}
+
+.guide-box {
+    padding: 22px;
+    margin-bottom: 15px;
+
+    border: 1px solid #d7dfea;
+    border-radius: 10px;
+
+    background: #fafcff;
+}
+
+.guide-box h3 {
+    margin-bottom: 10px;
+
+    font-size: 16px;
+    font-weight: 700;
+    color: #17305a;
+}
+
+.guide-box p {
+    margin: 0;
+
+    font-size: 13px;
+    line-height: 1.8;
+    color: #718097;
+}
 
 /* ================= RIGHT ================= */
 
