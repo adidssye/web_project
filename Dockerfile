@@ -2,7 +2,9 @@
 FROM python:3.13-slim
 
 
+
 # [수정] 시간대 설정(KST)
+
 
 # tzdata를 설치하고 환경 변수를 설정합니다.
 ENV TZ=Asia/Seoul
@@ -10,6 +12,7 @@ RUN apt-get update && apt-get install -y tzdata && \
     ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
     echo $TZ > /etc/timezone && \
     apt-get clean
+
 
 
 # 작업 디렉토리 생성 및 이동 
