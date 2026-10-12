@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileField, FileAllowed  # < import 추가
 from wtforms.fields.simple import (
     StringField,
     PasswordField,
@@ -125,6 +126,7 @@ class LoginForm(FlaskForm):
 
     submit = SubmitField('로그인')
 
+
 class ProfileEditForm(FlaskForm):
     avatar = FileField(
         '프로필 이미지',
@@ -136,7 +138,9 @@ class ProfileEditForm(FlaskForm):
         ]
     )
 
+
     # 기존 nickname, 비밀번호, submit 필드는 유지
+
     nickname = StringField(
         '닉네임',
         filters=[lambda value: value.strip() if value else value],

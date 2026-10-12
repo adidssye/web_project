@@ -8,6 +8,8 @@
     {% include 'theme_head.html' %}
 
 
+
+
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/mypage.css') }}">
 
@@ -57,6 +59,7 @@
             align-items: center;
             gap: 10px;
             margin-top: 24px;
+            flex-wrap: wrap;
         }
 
         .profile-save-btn {
@@ -83,10 +86,6 @@
 
         .profile-password-field {
             margin-top: 18px;
-        }
-
-        .profile-edit-actions {
-            flex-wrap: wrap;
         }
 
         .profile-edit-card .profile-btn {
@@ -158,6 +157,7 @@
         <fieldset class="profile-password-section">
             <legend>비밀번호 변경</legend>
 
+
             <p class="profile-edit-help">
                 닉네임만 수정하려면 아래 세 항목을 모두 비워 두세요.
                 비밀번호를 변경하면 다시 로그인해야 합니다.
@@ -171,7 +171,35 @@
                 placeholder='현재 비밀번호를 입력해 주세요'
                 ) }}
 
-                {% for error in form.current_password.errors %}
+
+            {% if g.user.profile_image %}
+                <div style="margin-bottom: 20px; text-align: center;">
+                    <img src="{{ url_for('static', filename=g.user.profile_image) }}"
+                         alt="현재 프로필 이미지"
+                         style="width:100px; height:100px; object-fit:cover; border-radius:50%;">
+                </div>
+            {% endif %}
+
+            <div style="margin-bottom: 24px;">
+                {{ form.avatar.label }}
+                {{ form.avatar(
+                    class_='profile-edit-input',
+                    accept='.jpg,.jpeg,.png,.webp'
+                ) }}
+
+                <p class="profile-edit-help">
+                    JPG, PNG, WEBP / 최대 5MB.<br>
+                    사진을 선택하지 않으면 기존 이미지가 유지됩니다.
+                </p>
+
+                {% for error in form.avatar.errors %}
+                    <p class="profile-edit-error" role="alert">{{ error }}</p>
+                {% endfor %}
+            </div>
+
+            {% if save_error %}
+
+
                 <p class="profile-edit-error" role="alert">
                     {{ error }}
                 </p>
@@ -196,8 +224,15 @@
                 <p class="profile-edit-error" role="alert">
                     {{ error }}
                 </p>
+
+            {% endfor %}
+
+            <fieldset class="profile-password-section">
+                <legend>비밀번호 변경</legend>
+
                 {% endfor %}
             </div>
+
 
             <div class="profile-password-field">
                 {{ form.confirm_password.label }}
