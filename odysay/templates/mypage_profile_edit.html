@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>프로필 수정 | 어딧세이</title>
     {% include 'components/language_assets.html' %}
-        {% include 'theme_head.html' %}
-
+    {% include 'theme_head.html' %}
 
     <link rel="stylesheet"
           href="{{ url_for('static', filename='css/mypage.css') }}">
@@ -57,6 +56,7 @@
             align-items: center;
             gap: 10px;
             margin-top: 24px;
+            flex-wrap: wrap;
         }
 
         .profile-save-btn {
@@ -67,7 +67,8 @@
             color: #fff;
             cursor: pointer;
         }
-                .profile-password-section {
+
+        .profile-password-section {
             min-width: 0;
             margin: 28px 0 0;
             padding: 20px 0 0;
@@ -84,10 +85,6 @@
             margin-top: 18px;
         }
 
-        .profile-edit-actions {
-            flex-wrap: wrap;
-        }
-
         .profile-edit-card .profile-btn {
             display: inline-block;
             text-decoration: none;
@@ -101,12 +98,37 @@
 <main class="profile-edit-wrap">
     <h1 class="page-title">프로필 수정</h1>
 
-
         <form class="profile-edit-card"
               method="POST"
+              enctype="multipart/form-data"
               action="{{ url_for('profile.profile_edit') }}">
 
             {{ form.hidden_tag() }}
+
+            {% if g.user.profile_image %}
+                <div style="margin-bottom: 20px; text-align: center;">
+                    <img src="{{ url_for('static', filename=g.user.profile_image) }}"
+                         alt="현재 프로필 이미지"
+                         style="width:100px; height:100px; object-fit:cover; border-radius:50%;">
+                </div>
+            {% endif %}
+
+            <div style="margin-bottom: 24px;">
+                {{ form.avatar.label }}
+                {{ form.avatar(
+                    class_='profile-edit-input',
+                    accept='.jpg,.jpeg,.png,.webp'
+                ) }}
+
+                <p class="profile-edit-help">
+                    JPG, PNG, WEBP / 최대 5MB.<br>
+                    사진을 선택하지 않으면 기존 이미지가 유지됩니다.
+                </p>
+
+                {% for error in form.avatar.errors %}
+                    <p class="profile-edit-error" role="alert">{{ error }}</p>
+                {% endfor %}
+            </div>
 
             {% if save_error %}
                 <p class="profile-edit-error" role="alert">
@@ -133,7 +155,8 @@
                     {{ error }}
                 </p>
             {% endfor %}
-                        <fieldset class="profile-password-section">
+
+            <fieldset class="profile-password-section">
                 <legend>비밀번호 변경</legend>
 
                 <p class="profile-edit-help">
